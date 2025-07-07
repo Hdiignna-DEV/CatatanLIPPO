@@ -171,44 +171,62 @@
             <ul class="contest-list">
                 <li class="contest-item">
                     <div>
-                        <div class="contest-name">Balap Karung</div>
-                        <div class="contest-details">Anak-anak (5-12 tahun) • 17 Agustus, 09:00</div>
+                        <div class="contest-name">Memuat Lomba...</div>
+                        <div class="contest-details"></div>
                     </div>
-                    <div class="contest-prize">Rp 200K</div>
-                </li>
-                <li class="contest-item">
-                    <div>
-                        <div class="contest-name">Makan Kerupuk</div>
-                        <div class="contest-details">Dewasa • 17 Agustus, 10:00</div>
-                    </div>
-                    <div class="contest-prize">Rp 300K</div>
-                </li>
-                <li class="contest-item">
-                    <div>
-                        <div class="contest-name">Tarik Tambang</div>
-                        <div class="contest-details">Tim (5 orang) • 17 Agustus, 11:00</div>
-                    </div>
-                    <div class="contest-prize">Rp 500K</div>
-                </li>
-                <li class="contest-item">
-                    <div>
-                        <div class="contest-name">Lomba Masak</div>
-                        <div class="contest-details">Ibu-ibu • 18 Agustus, 08:00</div>
-                    </div>
-                    <div class="contest-prize">Rp 400K</div>
-                </li>
-                <li class="contest-item">
-                    <div>
-                        <div class="contest-name">Panjat Pinang</div>
-                        <div class="contest-details">Remaja-Dewasa • 18 Agustus, 14:00</div>
-                    </div>
-                    <div class="contest-prize">Rp 600K</div>
                 </li>
             </ul>
-            <div class="action-buttons">
-                <a href="#" class="btn btn-primary">Daftar Lomba</a>
-                <a href="#" class="btn btn-secondary">Lihat Semua</a>
+            
+            <div class="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-lg shadow-inner">
+                <h3 class="text-xl font-bold text-indonesia-red mb-4">Tambah/Edit Lomba</h3>
+                <form id="contestForm" class="space-y-4">
+                    <input type="hidden" id="contestId">
+                    <div>
+                        <label for="contestName" class="block text-sm font-medium text-gray-700">Nama Lomba</label>
+                        <input type="text" id="contestName" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" placeholder="Contoh: Balap Karung" required>
+                    </div>
+                    <div>
+                        <label for="contestDetails" class="block text-sm font-medium text-gray-700">Detail Lomba</label>
+                        <input type="text" id="contestDetails" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" placeholder="Contoh: Anak-anak (5-12 tahun)" required>
+                    </div>
+                    <div>
+                        <label for="contestDate" class="block text-sm font-medium text-gray-700">Tanggal</label>
+                        <input type="date" id="contestDate" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div>
+                        <label for="contestTime" class="block text-sm font-medium text-gray-700">Waktu</label>
+                        <input type="time" id="contestTime" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div>
+                        <label for="contestPrize" class="block text-sm font-medium text-gray-700">Hadiah</label>
+                        <input type="text" id="contestPrize" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" placeholder="Contoh: Rp 200K" required>
+                    </div>
+                    <div class="flex space-x-4">
+                        <button type="submit" class="btn btn-primary flex-grow">Simpan Lomba</button>
+                        <button type="button" id="cancelEditContestBtn" class="btn btn-secondary flex-grow hidden">Batal Edit</button>
+                    </div>
+                </form>
             </div>
+            <div class="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-lg shadow-inner">
+                <h3 class="text-xl font-bold text-indonesia-red mb-4">Daftar Lomba Lengkap</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Detail</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hadiah</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contestTransactionsTableBody" class="bg-white divide-y divide-gray-200">
+                            <tr><td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Memuat lomba...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
 
         <div class="dashboard-card" id="doorprize" data-aos="fade-right" data-aos-delay="100">
@@ -218,84 +236,143 @@
             <div class="mb-5">
                 <div class="flex justify-between items-center mb-4">
                     <span class="font-semibold text-indonesia-red">Status Kupon:</span>
-                    <span style="font-size: 14px; color: #666;">Tersedia: 37 | Terambil: 63</span>
+                    <span id="doorprizeStatusSummary" style="font-size: 14px; color: #666;">Memuat status...</span>
                 </div>
             </div>
-            <div class="doorprize-grid">
+            <div class="doorprize-grid" id="doorprizeGridDisplay">
                 <div class="doorprize-item">
-                    <div class="doorprize-number">001</div>
-                    <div class="doorprize-status taken">Terambil</div>
-                </div>
-                <div class="doorprize-item">
-                    <div class="doorprize-number">002</div>
-                    <div class="doorprize-status">Tersedia</div>
-                </div>
-                <div class="doorprize-item">
-                    <div class="doorprize-number">003</div>
-                    <div class="doorprize-status taken">Terambil</div>
-                </div>
-                <div class="doorprize-item">
-                    <div class="doorprize-number">004</div>
-                    <div class="doorprize-status">Tersedia</div>
-                </div>
-                <div class="doorprize-item">
-                    <div class="doorprize-number">005</div>
-                    <div class="doorprize-status">Tersedia</div>
-                </div>
-                <div class="doorprize-item">
-                    <div class="doorprize-number">006</div>
-                    <div class="doorprize-status taken">Terambil</div>
+                    <div class="doorprize-number">Memuat</div>
+                    <div class="doorprize-status">...</div>
                 </div>
             </div>
             <div class="mt-5 p-4 bg-gradient-to-br from-gray-50 to-gray-200 rounded-lg">
                 <h4 class="text-indonesia-red mb-2.5 font-semibold">Hadiah Doorprize:</h4>
-                <div class="text-sm text-gray-600">
+                <div style="font-size: 14px; color: #666;">
                     Juara 1: Kulkas 1 Pintu<br>
                     Juara 2: Mesin Cuci<br>
                     Juara 3: Rice Cooker<br>
-                    + 97 hadiah menarik lainnya
+                    + Banyak hadiah menarik lainnya
                 </div>
             </div>
             <div class="action-buttons">
                 <a href="#" class="btn btn-primary">Ambil Kupon</a>
                 <a href="#" class="btn btn-secondary">Lihat Hadiah</a>
             </div>
+
+            <div class="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-lg shadow-inner">
+                <h3 class="text-xl font-bold text-indonesia-red mb-4">Tambah/Edit Doorprize</h3>
+                <form id="doorprizeForm" class="space-y-4">
+                    <input type="hidden" id="doorprizeId">
+                    <div>
+                        <label for="doorprizeNumber" class="block text-sm font-medium text-gray-700">Nomor Kupon</label>
+                        <input type="text" id="doorprizeNumber" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" placeholder="Contoh: 007" required>
+                    </div>
+                    <div>
+                        <label for="doorprizeStatus" class="block text-sm font-medium text-gray-700">Status Kupon</label>
+                        <select id="doorprizeStatus" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" required>
+                            <option value="available">Tersedia</option>
+                            <option value="taken">Terambil</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="doorprizeWinner" class="block text-sm font-medium text-gray-700">Pemenang (Opsional)</label>
+                        <input type="text" id="doorprizeWinner" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" placeholder="Nama pemenang">
+                    </div>
+                    <div>
+                        <label for="doorprizeDetail" class="block text-sm font-medium text-gray-700">Detail Hadiah (Opsional)</label>
+                        <input type="text" id="doorprizeDetail" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" placeholder="Contoh: Kulkas 1 Pintu">
+                    </div>
+                    <div class="flex space-x-4">
+                        <button type="submit" class="btn btn-primary flex-grow">Simpan Doorprize</button>
+                        <button type="button" id="cancelEditDoorprizeBtn" class="btn btn-secondary flex-grow hidden">Batal Edit</button>
+                    </div>
+                </form>
+            </div>
+            <div class="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-lg shadow-inner">
+                <h3 class="text-xl font-bold text-indonesia-red mb-4">Daftar Doorprize Lengkap</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nomor</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pemenang</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hadiah</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="doorprizeTransactionsTableBody" class="bg-white divide-y divide-gray-200">
+                            <tr><td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Memuat doorprize...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
 
         <div class="dashboard-card" id="jadwal" data-aos="fade-left" data-aos-delay="100">
             <div class="card-header">
                 <div class="card-icon"><i data-lucide="calendar"></i></div> <div class="card-title">Jadwal Kegiatan</div>
             </div>
-            <div class="activity-timeline">
+            <div class="activity-timeline" id="activityTimelineDisplay">
                 <div class="timeline-item">
-                    <div class="timeline-time">17 Agustus - 06:00</div>
-                    <div class="timeline-title">Upacara Bendera</div>
-                    <div class="timeline-desc">Lapangan Poncol • Peserta: Seluruh warga</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-time">17 Agustus - 08:00</div>
-                    <div class="timeline-title">Lomba Anak-Anak</div>
-                    <div class="timeline-desc">Balap karung, makan kerupuk, estafet air</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-time">17 Agustus - 13:00</div>
-                    <div class="timeline-title">Lomba Dewasa</div>
-                    <div class="timeline-desc">Tarik tambang, volley balon, kuis berhadiah</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-time">18 Agustus - 08:00</div>
-                    <div class="timeline-title">Lomba Masak Nusantara</div>
-                    <div class="timeline-desc">Khusus ibu-ibu • Tema: Makanan Tradisional</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-time">18 Agustus - 19:00</div>
-                    <div class="timeline-title">Malam Hiburan</div>
-                    <div class="timeline-desc">Pentas seni, pengundian doorprize utama</div>
+                    <div class="timeline-time">Memuat Jadwal...</div>
+                    <div class="timeline-title"></div>
                 </div>
             </div>
             <div class="action-buttons">
                 <a href="#" class="btn btn-primary">Lihat Lengkap</a>
                 <a href="#" class="btn btn-secondary">Reminder</a>
+            </div>
+
+            <div class="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-lg shadow-inner">
+                <h3 class="text-xl font-bold text-indonesia-red mb-4">Tambah/Edit Jadwal</h3>
+                <form id="scheduleForm" class="space-y-4">
+                    <input type="hidden" id="scheduleId">
+                    <div>
+                        <label for="scheduleTitle" class="block text-sm font-medium text-gray-700">Judul Acara</label>
+                        <input type="text" id="scheduleTitle" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" placeholder="Contoh: Upacara Bendera" required>
+                    </div>
+                    <div>
+                        <label for="scheduleDescription" class="block text-sm font-medium text-gray-700">Deskripsi</label>
+                        <input type="text" id="scheduleDescription" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" placeholder="Contoh: Lapangan Poncol • Peserta: Seluruh warga" required>
+                    </div>
+                    <div>
+                        <label for="scheduleDate" class="block text-sm font-medium text-gray-700">Tanggal</label>
+                        <input type="date" id="scheduleDate" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div>
+                        <label for="scheduleTime" class="block text-sm font-medium text-gray-700">Waktu</label>
+                        <input type="time" id="scheduleTime" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div>
+                        <label for="scheduleLocation" class="block text-sm font-medium text-gray-700">Lokasi (Opsional)</label>
+                        <input type="text" id="scheduleLocation" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" placeholder="Contoh: Balai Warga">
+                    </div>
+                    <div class="flex space-x-4">
+                        <button type="submit" class="btn btn-primary flex-grow">Simpan Jadwal</button>
+                        <button type="button" id="cancelEditScheduleBtn" class="btn btn-secondary flex-grow hidden">Batal Edit</button>
+                    </div>
+                </form>
+            </div>
+            <div class="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-lg shadow-inner">
+                <h3 class="text-xl font-bold text-indonesia-red mb-4">Daftar Jadwal Lengkap</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judul</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lokasi</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scheduleTransactionsTableBody" class="bg-white divide-y divide-gray-200">
+                            <tr><td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Memuat jadwal...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
