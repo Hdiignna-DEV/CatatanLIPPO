@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     // URL dasar API backend Anda
-    // PENTING: Ganti 'http://localhost:5000' dengan URL publik backend Anda setelah di-deploy ke Vercel Functions.
+    // PENTING: Ganti 'https://catatanlippo.vercel.app/api' dengan URL publik backend Anda jika berbeda.
     // Jika frontend dan backend Anda di Vercel, Anda bisa pakai path relatif '/api'.
-    const API_BASE_URL = 'https://catatanlippo.vercel.app/api'; // Ganti dengan URL Vercel Anda, atau cukup '/api'
+    const API_BASE_URL = 'https://catatanlippo.vercel.app/api';
 
     // Inisialisasi Lucide Icons
     lucide.createIcons();
@@ -74,18 +74,21 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             // Keuangan
             const financeResponse = await fetch(`${API_BASE_URL}/finances`);
+            if (!financeResponse.ok) throw new Error(`HTTP error! status: ${financeResponse.status}`);
             const financeData = await financeResponse.json();
             renderFinanceSummary(financeData.summary, financeData.rincianPengeluaran);
             renderFinanceTransactionsTable(financeData.finances);
 
             // Lomba
             const contestResponse = await fetch(`${API_BASE_URL}/contests`);
+            if (!contestResponse.ok) throw new Error(`HTTP error! status: ${contestResponse.status}`);
             const contestData = await contestResponse.json();
             renderContestList(contestData.contests);
             renderContestTransactionsTable(contestData.contests);
 
             // Doorprize
             const doorprizeResponse = await fetch(`${API_BASE_URL}/doorprize`);
+            if (!doorprizeResponse.ok) throw new Error(`HTTP error! status: ${doorprizeResponse.status}`);
             const doorprizeData = await doorprizeResponse.json();
             renderDoorprizeSummary(doorprizeData.summary);
             renderDoorprizeGrid(doorprizeData.doorprizeItems);
@@ -93,6 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Jadwal
             const scheduleResponse = await fetch(`${API_BASE_URL}/schedule`);
+            if (!scheduleResponse.ok) throw new Error(`HTTP error! status: ${scheduleResponse.status}`);
             const scheduleData = await scheduleResponse.json();
             renderScheduleTimeline(scheduleData.scheduleItems);
             renderScheduleTransactionsTable(scheduleData.scheduleItems);
@@ -187,6 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Fungsi untuk merender tabel daftar transaksi keuangan
     function renderFinanceTransactionsTable(finances) {
         financeTransactionsTableBody.innerHTML = '';
         if (finances.length === 0) {
@@ -197,6 +202,8 @@ document.addEventListener('DOMContentLoaded', function() {
         finances.forEach(finance => {
             const row = document.createElement('tr');
             row.className = 'hover:bg-gray-50';
+            // Perhatikan bahwa finance._id digunakan untuk ID, sesuaikan dengan backend SQL
+            // Backend SQL kita sudah mengembalikan ID sebagai '_id'
             row.innerHTML = `
                 <td class="px-6 py-4 whitespace-nowrap">
                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${finance.type === 'pemasukan' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
@@ -253,7 +260,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             if (!response.ok) {
-                throw new Error(`Failed to save transaction: ${response.statusText}`);
+                const errorData = await response.json();
+                throw new Error(`Failed to save transaction: ${errorData.message || response.statusText}`);
             }
 
             resetFinanceForm();
@@ -273,7 +281,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             const finance = await response.json();
 
-            financeIdInput.value = finance._id;
+            financeIdInput.value = finance._id; // Menggunakan _id karena backend mengembalikan ini
             transactionTypeInput.value = finance.type;
             transactionDescriptionInput.value = finance.description;
             transactionAmountInput.value = finance.amount;
@@ -293,7 +301,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     method: 'DELETE'
                 });
                 if (!response.ok) {
-                    throw new Error(`Failed to delete transaction: ${response.statusText}`);
+                    const errorData = await response.json();
+                    throw new Error(`Failed to delete transaction: ${errorData.message || response.statusText}`);
                 }
                 await fetchDataAndRender();
             } catch (error) {
@@ -324,12 +333,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         contests.forEach(contest => {
+            const rowDate = new Date(contest.date).toLocaleDateString('id-ID'); // Format tanggal untuk tampilan
             const li = document.createElement('li');
             li.className = 'contest-item';
             li.innerHTML = `
                 <div>
                     <div class="contest-name">${contest.name}</div>
-                    <div class="contest-details">${contest.details} • ${new Date(contest.date).toLocaleDateString('id-ID')}, ${contest.time}</div>
+                    <div class="contest-details">${contest.details} • ${rowDate}, ${contest.time}</div>
                 </div>
                 <div class="contest-prize">${contest.prize}</div>
             `;
@@ -345,12 +355,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         contests.forEach(contest => {
+            const rowDate = new Date(contest.date).toLocaleDateString('id-ID');
             const row = document.createElement('tr');
             row.className = 'hover:bg-gray-50';
             row.innerHTML = `
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${contest.name}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${contest.details}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${new Date(contest.date).toLocaleDateString('id-ID')}, ${contest.time}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${rowDate}, ${contest.time}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${contest.prize}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button data-id="${contest._id}" class="edit-contest-btn text-indigo-600 hover:text-indigo-900 mr-2">Edit</button>
@@ -401,7 +412,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             if (!response.ok) {
-                throw new Error(`Failed to save contest: ${response.statusText}`);
+                const errorData = await response.json();
+                throw new Error(`Failed to save contest: ${errorData.message || response.statusText}`);
             }
 
             resetContestForm();
@@ -424,7 +436,8 @@ document.addEventListener('DOMContentLoaded', function() {
             contestIdInput.value = contest._id;
             contestNameInput.value = contest.name;
             contestDetailsInput.value = contest.details;
-            contestDateInput.value = contest.date.substring(0, 10); // Format YYYY-MM-DD
+            // Format tanggal dari backend (misal "2025-07-08T00:00:00.000Z") ke "YYYY-MM-DD"
+            contestDateInput.value = contest.date ? new Date(contest.date).toISOString().substring(0, 10) : '';
             contestTimeInput.value = contest.time;
             contestPrizeInput.value = contest.prize;
 
@@ -443,7 +456,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     method: 'DELETE'
                 });
                 if (!response.ok) {
-                    throw new Error(`Failed to delete contest: ${response.statusText}`);
+                    const errorData = await response.json();
+                    throw new Error(`Failed to delete contest: ${errorData.message || response.statusText}`);
                 }
                 await fetchDataAndRender();
             } catch (error) {
@@ -555,7 +569,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             if (!response.ok) {
-                throw new Error(`Failed to save doorprize: ${response.statusText}`);
+                const errorData = await response.json();
+                throw new Error(`Failed to save doorprize: ${errorData.message || response.statusText}`);
             }
 
             resetDoorprizeForm();
@@ -596,7 +611,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     method: 'DELETE'
                 });
                 if (!response.ok) {
-                    throw new Error(`Failed to delete doorprize: ${response.statusText}`);
+                    const errorData = await response.json();
+                    throw new Error(`Failed to delete doorprize: ${errorData.message || response.statusText}`);
                 }
                 await fetchDataAndRender();
             } catch (error) {
@@ -626,10 +642,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         scheduleItems.forEach(item => {
+            const rowDate = new Date(item.date).toLocaleDateString('id-ID'); // Format tanggal untuk tampilan
             const div = document.createElement('div');
             div.className = 'timeline-item';
             div.innerHTML = `
-                <div class="timeline-time">${new Date(item.date).toLocaleDateString('id-ID')} - ${item.time}</div>
+                <div class="timeline-time">${rowDate} - ${item.time}</div>
                 <div class="timeline-title">${item.title}</div>
                 <div class="timeline-desc">${item.description} ${item.location ? '• ' + item.location : ''}</div>
             `;
@@ -645,10 +662,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         scheduleItems.forEach(item => {
+            const rowDate = new Date(item.date).toLocaleDateString('id-ID');
             const row = document.createElement('tr');
             row.className = 'hover:bg-gray-50';
             row.innerHTML = `
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${new Date(item.date).toLocaleDateString('id-ID')}<br>${item.time}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${rowDate}<br>${item.time}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.title}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.description}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.location || '-'}</td>
@@ -678,7 +696,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const id = scheduleIdInput.value;
         const title = scheduleTitleInput.value;
         const description = scheduleDescriptionInput.value;
-        const date = scheduleDateInput.value; // Format YYYY-MM-DD
+        const date = scheduleDateInput.value; // Format 'YYYY-MM-DD'
         const time = scheduleTimeInput.value; // Format HH:MM
         const location = scheduleLocationInput.value;
 
@@ -701,7 +719,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             if (!response.ok) {
-                throw new Error(`Failed to save schedule item: ${response.statusText}`);
+                const errorData = await response.json();
+                throw new Error(`Failed to save schedule item: ${errorData.message || response.statusText}`);
             }
 
             resetScheduleForm();
@@ -724,7 +743,8 @@ document.addEventListener('DOMContentLoaded', function() {
             scheduleIdInput.value = item._id;
             scheduleTitleInput.value = item.title;
             scheduleDescriptionInput.value = item.description;
-            scheduleDateInput.value = item.date.substring(0, 10); // Format YYYY-MM-DD
+            // Format tanggal dari backend (misal "2025-07-08T00:00:00.000Z") ke "YYYY-MM-DD"
+            scheduleDateInput.value = item.date ? new Date(item.date).toISOString().substring(0, 10) : '';
             scheduleTimeInput.value = item.time;
             scheduleLocationInput.value = item.location || '';
 
@@ -743,7 +763,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     method: 'DELETE'
                 });
                 if (!response.ok) {
-                    throw new Error(`Failed to delete schedule item: ${response.statusText}`);
+                    const errorData = await response.json();
+                    throw new Error(`Failed to delete schedule item: ${errorData.message || response.statusText}`);
                 }
                 await fetchDataAndRender();
             } catch (error) {
