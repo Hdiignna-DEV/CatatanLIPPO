@@ -9,17 +9,17 @@
     "dev": "npm run watch:css",
     "start": "npx serve public"
   },
-  "keywords": [
-    "HUT RI",
-    "Indonesia",
-    "Dashboard",
-    "TailwindCSS",
-    "AlpineJS"
-  ],
+  "keywords": ["HUT RI", "Indonesia", "Dashboard", "TailwindCSS", "AlpineJS"],
   "author": "Your Name",
   "license": "ISC",
   "devDependencies": {
-    "serve": "^14.2.3",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^3.4.4",
+    "serve": "^14.2.3"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.4.3"
   }
 }

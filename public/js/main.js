@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // URL API backend Anda.
             // PENTING: Ganti 'http://localhost:5000' dengan URL publik backend Anda setelah di-deploy (misalnya Render/Railway).
             // Contoh: const financeResponse = await fetch('https://api-catatanlippo.render.com/api/finances');
-            const financeResponse = await fetch('http://localhost:5000/api/finances');
+            const financeResponse = await fetch('https://catatanlippo.vercel.app/api/finances');
             const financeData = await financeResponse.json();
 
             // Render bagian keuangan dengan data dari API
