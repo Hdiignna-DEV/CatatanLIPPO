@@ -12,7 +12,7 @@ const app = express();
 // Penting: Konfigurasi CORS untuk mengizinkan permintaan dari domain Vercel frontend Anda
 // process.env.FRONTEND_URL harus diatur di Vercel Environment Variables
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000' // Sesuaikan dengan URL frontend Vercel Anda
+    origin: process.env.FRONTEND_URL || 'https://catatanlippo.vercel.app' // Sesuaikan dengan URL frontend Vercel Anda
 }));
 app.use(express.json());
 
