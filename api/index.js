@@ -21,9 +21,8 @@ mongoose.connect(process.env.MONGODB_URI)
     .catch(err => console.error('Could not connect to MongoDB:', err));
 
 // Definisikan Skema dan Model
-// Skema untuk Keuangan
 const financeSchema = new mongoose.Schema({
-    type: { type: String, required: true }, // 'pemasukan' atau 'pengeluaran'
+    type: { type: String, required: true },
     description: { type: String, required: true },
     amount: { type: Number, required: true },
     date: { type: Date, default: Date.now }
@@ -31,41 +30,14 @@ const financeSchema = new mongoose.Schema({
 const Finance = mongoose.model('Finance', financeSchema);
 
 // TODO: Definisikan skema dan model untuk Lomba, Doorprize, Jadwal jika sudah ada di backend Anda
-// Contoh:
-// const contestSchema = new mongoose.Schema({
-//     name: String,
-//     details: String,
-//     date: Date,
-//     time: String,
-//     prize: String
-// });
-// const Contest = mongoose.model('Contest', contestSchema);
-
-// const doorprizeSchema = new mongoose.Schema({
-//     number: String,
-//     status: { type: String, enum: ['available', 'taken'], default: 'available' },
-//     winner: String, // Opsional
-//     prizeDetail: String // Opsional
-// });
-// const Doorprize = mongoose.model('Doorprize', doorprizeSchema);
-
-// const scheduleSchema = new mongoose.Schema({
-//     time: String,
-//     title: String,
-//     description: String,
-//     location: String,
-//     date: Date
-// });
-// const Schedule = mongoose.model('Schedule', scheduleSchema);
-
 
 // Rute API
-// PENTING: Path rute di sini adalah relative terhadap '/api/'.
-// Jadi '/finances' akan diakses sebagai '/api/finances' oleh frontend.
+// PENTING: Path rute di sini adalah yang akan dicari oleh Express.js.
+// Kita kembalikan '/api/finances' karena itu yang diterima oleh Express setelah routing Vercel.
 
 // Rute untuk Keuangan
 // Mendapatkan semua transaksi keuangan
-app.get('/finances', async (req, res) => { // Dulu '/api/finances', sekarang '/finances'
+app.get('/api/finances', async (req, res) => { // Dikembalikan ke '/api/finances'
     try {
         const finances = await Finance.find();
 
@@ -74,10 +46,8 @@ app.get('/finances', async (req, res) => { // Dulu '/api/finances', sekarang '/f
         const totalPengeluaran = finances.filter(f => f.type === 'pengeluaran').reduce((acc, curr) => acc + curr.amount, 0);
         const sisaDana = totalPemasukan - totalPengeluaran;
 
-        // Untuk rincian pengeluaran, idealnya Anda akan mengelompokkan transaksi dari DB berdasarkan kategori.
-        // Untuk saat ini, kita bisa pertahankan data statis atau menambahkan logika kategori di skema Finance.
         const rincianPengeluaran = {
-            dekorasiPerlengkapan: 3500000, // Placeholder statis untuk demo
+            dekorasiPerlengkapan: 3500000,
             hadiahLomba: 2800000,
             konsumsi: 1200000,
             doorprize: 700000
@@ -89,61 +59,37 @@ app.get('/finances', async (req, res) => { // Dulu '/api/finances', sekarang '/f
                 totalPemasukan,
                 totalPengeluaran,
                 sisaDana,
-                rataRataPerKK: 260000 // Statis untuk demo
+                rataRataPerKK: 260000
             },
             rincianPengeluaran
         });
     } catch (err) {
-        console.error(err); // Log error di server
+        console.error(err);
         res.status(500).json({ message: 'Server error fetching finances.' });
     }
 });
 
 // Menambahkan transaksi keuangan baru
-app.post('/finances', async (req, res) => { // Dulu '/api/finances', sekarang '/finances'
-    const { type, description, amount } = req.body; // Jika Anda menambahkan 'category', tambahkan di sini juga
+app.post('/api/finances', async (req, res) => { // Dikembalikan ke '/api/finances'
+    const { type, description, amount } = req.body;
 
     const finance = new Finance({
         type,
         description,
         amount
-        // category // uncomment jika category ditambahkan ke skema
     });
     try {
         const newFinance = await finance.save();
         res.status(201).json(newFinance);
     } catch (err) {
-        console.error(err); // Log error di server
+        console.error(err);
         res.status(400).json({ message: 'Error adding finance transaction.' });
     }
 });
 
 // TODO: Buat rute API untuk Lomba, Doorprize, Jadwal
-// Contoh rute untuk Lomba:
-// app.get('/contests', async (req, res) => { // Dulu '/api/contests', sekarang '/contests'
-//     try {
-//         const contests = await Contest.find();
-//         res.json({ contests });
-//     } catch (err) {
-//         res.status(500).json({ message: err.message });
-//     }
-// });
-// app.post('/contests', async (req, res) => { // Dulu '/api/contests', sekarang '/contests'
-//     const contest = new Contest(req.body);
-//     try {
-//         const newContest = await contest.save();
-//         res.status(201).json(newContest);
-//     } catch (err) {
-//         res.status(400).json({ message: err.message });
-//     }
-// });
-
 
 // EXPORT Express app sebagai fungsi handler
-// Ini PENTING untuk Vercel Serverless Functions
 module.exports = app;
 
 // Baris app.listen() tidak diperlukan untuk Vercel Functions
-// app.listen(port, () => {
-//     console.log(`Server is running on port ${port}`);
-// });
