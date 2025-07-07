@@ -19,7 +19,7 @@ const config = {
     database: process.env.DB_DATABASE, // e.g., 'catatanlippo-db'
     options: {
         encrypt: true, // WAJIB untuk Azure SQL Database
-        trustServerCertificate: false // Atur ke true untuk development lokal jika ada masalah SSL, tapi false lebih aman untuk produksi
+        trustServerCertificate: false // Atur ke true untuk dev local jika ada masalah SSL, tapi false lebih aman untuk produksi
     }
 };
 
@@ -212,7 +212,8 @@ app.get('/api/contests', async (req, res) => {
             prize: row.prize
         }));
         res.json({ contests });
-    } catch (err) {
+    }
+    catch (err) {
         console.error('Server error fetching contests:', err.message);
         res.status(500).json({ message: 'Server error fetching contests: ' + err.message });
     }
