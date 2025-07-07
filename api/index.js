@@ -1,20 +1,18 @@
-require('dotenv').config({ path: '../.env' }); // Perbarui path ke .env di root proyek
+require('dotenv').config({ path: '../.env' }); // Path ke .env di root proyek
 
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
-// Port tidak perlu didefinisikan untuk Vercel Functions, karena Vercel yang menanganinya
-// const port = process.env.PORT || 5000;
 
 // Middleware
-// Penting: Konfigurasi CORS untuk mengizinkan permintaan dari domain Vercel frontend Anda
+// Konfigurasi CORS untuk mengizinkan permintaan dari domain Vercel frontend Anda
 // process.env.FRONTEND_URL harus diatur di Vercel Environment Variables
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000' // Sesuaikan dengan URL frontend Vercel Anda
+    origin: process.env.FRONTEND_URL || 'https://catatanlippo.vercel.app' // Fallback untuk development lokal
 }));
-app.use(express.json());
+app.use(express.json()); // Parsing body permintaan JSON
 
 // Koneksi ke MongoDB
 // Pastikan MONGODB_URI diatur di Vercel Environment Variables
@@ -22,7 +20,8 @@ mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Could not connect to MongoDB:', err));
 
-// Definisikan Skema dan Model (contoh untuk Keuangan)
+// Definisikan Skema dan Model
+// Skema untuk Keuangan
 const financeSchema = new mongoose.Schema({
     type: { type: String, required: true }, // 'pemasukan' atau 'pengeluaran'
     description: { type: String, required: true },
@@ -31,7 +30,7 @@ const financeSchema = new mongoose.Schema({
 });
 const Finance = mongoose.model('Finance', financeSchema);
 
-// TODO: Definisikan skema dan model untuk Lomba, Doorprize, Jadwal
+// TODO: Definisikan skema dan model untuk Lomba, Doorprize, Jadwal jika sudah ada di backend Anda
 // Contoh:
 // const contestSchema = new mongoose.Schema({
 //     name: String,
@@ -60,9 +59,13 @@ const Finance = mongoose.model('Finance', financeSchema);
 // const Schedule = mongoose.model('Schedule', scheduleSchema);
 
 
-// Rute API (contoh untuk Keuangan)
+// Rute API
+// PENTING: Path rute di sini adalah relative terhadap '/api/'.
+// Jadi '/finances' akan diakses sebagai '/api/finances' oleh frontend.
+
+// Rute untuk Keuangan
 // Mendapatkan semua transaksi keuangan
-app.get('/api/finances', async (req, res) => {
+app.get('/finances', async (req, res) => { // Dulu '/api/finances', sekarang '/finances'
     try {
         const finances = await Finance.find();
 
@@ -86,7 +89,7 @@ app.get('/api/finances', async (req, res) => {
                 totalPemasukan,
                 totalPengeluaran,
                 sisaDana,
-                rataRataPerKK: 260000 // Ini juga data statis untuk demo
+                rataRataPerKK: 260000 // Statis untuk demo
             },
             rincianPengeluaran
         });
@@ -97,7 +100,7 @@ app.get('/api/finances', async (req, res) => {
 });
 
 // Menambahkan transaksi keuangan baru
-app.post('/api/finances', async (req, res) => {
+app.post('/finances', async (req, res) => { // Dulu '/api/finances', sekarang '/finances'
     const { type, description, amount } = req.body; // Jika Anda menambahkan 'category', tambahkan di sini juga
 
     const finance = new Finance({
@@ -115,9 +118,9 @@ app.post('/api/finances', async (req, res) => {
     }
 });
 
-// TODO: Buat rute API untuk Lomba, Doorprize, Jadwal (GET, POST, PUT, DELETE)
+// TODO: Buat rute API untuk Lomba, Doorprize, Jadwal
 // Contoh rute untuk Lomba:
-// app.get('/api/contests', async (req, res) => {
+// app.get('/contests', async (req, res) => { // Dulu '/api/contests', sekarang '/contests'
 //     try {
 //         const contests = await Contest.find();
 //         res.json({ contests });
@@ -125,7 +128,7 @@ app.post('/api/finances', async (req, res) => {
 //         res.status(500).json({ message: err.message });
 //     }
 // });
-// app.post('/api/contests', async (req, res) => {
+// app.post('/contests', async (req, res) => { // Dulu '/api/contests', sekarang '/contests'
 //     const contest = new Contest(req.body);
 //     try {
 //         const newContest = await contest.save();
@@ -140,7 +143,7 @@ app.post('/api/finances', async (req, res) => {
 // Ini PENTING untuk Vercel Serverless Functions
 module.exports = app;
 
-// Hapus bagian app.listen() karena Vercel yang menanganinya
+// Baris app.listen() tidak diperlukan untuk Vercel Functions
 // app.listen(port, () => {
 //     console.log(`Server is running on port ${port}`);
 // });
