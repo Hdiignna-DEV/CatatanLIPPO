@@ -115,9 +115,56 @@
                 <a href="#" class="btn btn-primary">Lihat Detail</a>
                 <a href="#" class="btn btn-secondary">Cetak Laporan</a>
             </div>
-        </div>
 
-        <div class="dashboard-card" id="lomba" data-aos="fade-left">
+            <div class="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-lg shadow-inner">
+                <h3 class="text-xl font-bold text-indonesia-red mb-4">Tambah/Edit Transaksi</h3>
+                <form id="financeForm" class="space-y-4">
+                    <input type="hidden" id="financeId"> <div>
+                        <label for="transactionType" class="block text-sm font-medium text-gray-700">Jenis Transaksi</label>
+                        <select id="transactionType" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indonesia-red focus:border-indonesia-red sm:text-sm" required>
+                            <option value="">Pilih Jenis</option>
+                            <option value="pemasukan">Pemasukan</option>
+                            <option value="pengeluaran">Pengeluaran</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="transactionDescription" class="block text-sm font-medium text-gray-700">Deskripsi</label>
+                        <input type="text" id="transactionDescription" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indonesia-red focus:border-indonesia-red sm:text-sm" placeholder="Contoh: Donasi Warga, Pembelian Kertas" required>
+                    </div>
+                    <div>
+                        <label for="transactionAmount" class="block text-sm font-medium text-gray-700">Jumlah (Rp)</label>
+                        <input type="number" id="transactionAmount" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indonesia-red focus:border-indonesia-red sm:text-sm" placeholder="Contoh: 500000" required min="0">
+                    </div>
+                    <div class="flex space-x-4">
+                        <button type="submit" class="btn btn-primary flex-grow">Simpan Transaksi</button>
+                        <button type="button" id="cancelEditBtn" class="btn btn-secondary flex-grow hidden">Batal Edit</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-lg shadow-inner">
+                <h3 class="text-xl font-bold text-indonesia-red mb-4">Daftar Transaksi Keuangan</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipe</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="financeTransactionsTableBody" class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Memuat transaksi...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div> <div class="dashboard-card" id="lomba" data-aos="fade-left">
             <div class="card-header">
                 <div class="card-icon"><i data-lucide="trophy"></i></div> <div class="card-title">Daftar Lomba</div>
             </div>
@@ -171,7 +218,7 @@
             <div class="mb-5">
                 <div class="flex justify-between items-center mb-4">
                     <span class="font-semibold text-indonesia-red">Status Kupon:</span>
-                    <span class="text-sm text-gray-600">Tersedia: 37 | Terambil: 63</span>
+                    <span style="font-size: 14px; color: #666;">Tersedia: 37 | Terambil: 63</span>
                 </div>
             </div>
             <div class="doorprize-grid">
