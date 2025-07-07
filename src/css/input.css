@@ -27,6 +27,7 @@
         @apply flex items-center gap-3;
     }
     .logo-icon {
+        /* Ikon logo dari Lucide Icons kini digunakan. Pastikan icon 'flag' ada atau ganti dengan emoji jika Lucide tidak dimuat */
         @apply w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-indonesia-white to-indonesia-red rounded-full flex items-center justify-center text-2xl md:text-3xl text-indonesia-red animate-logoSpin border-3 border-indonesia-white shadow-lg;
     }
     .logo-text {
@@ -79,6 +80,7 @@
         @apply flex items-center mb-5;
     }
     .card-icon {
+        /* Ikon kartu dari Lucide Icons kini digunakan. Pastikan icon 'wallet', 'trophy', 'gift', 'calendar' ada atau ganti dengan emoji */
         @apply w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-indonesia-red to-red-700 rounded-full flex items-center justify-center text-2xl md:text-3xl text-white mr-4 animate-iconBounce shadow-md;
     }
     .card-title {
@@ -126,11 +128,11 @@
     .doorprize-status {
         @apply text-xs px-2 py-1 rounded-full font-semibold; /* Lebih jelas */
     }
-    .doorprize-status.available {
+    .doorprize-status.available { /* Styling spesifik untuk status tersedia */
         @apply bg-green-500 text-white;
     }
-    .doorprize-status.taken {
-        @apply bg-red-600 text-white;
+    .doorprize-status.taken { /* Styling spesifik untuk status terambil */
+        @apply bg-red-600;
     }
     /* Activity Timeline - Visual lebih baik */
     .activity-timeline {
@@ -199,40 +201,9 @@
         @apply text-sm md:text-base opacity-90 mb-4;
     }
 
-    /* Form & Table Styling (tambahan untuk konsistensi) */
-    form div {
-        @apply mb-3; /* Jarak antar field form */
-    }
-    form label {
-        @apply text-sm font-semibold text-gray-800 mb-1;
-    }
-    form input[type="text"],
-    form input[type="number"],
-    form input[type="date"],
-    form input[type="time"],
-    form select {
-        @apply mt-1 block w-full p-2 md:p-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-indonesia-red focus:border-indonesia-red sm:text-sm transition-all duration-200;
-    }
-    table thead th {
-        @apply bg-gray-100 px-4 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider;
-    }
-    table tbody td {
-        @apply px-4 py-3 whitespace-nowrap text-sm text-gray-900;
-    }
-    table tbody tr:nth-child(odd) {
-        @apply bg-white;
-    }
-    table tbody tr:nth-child(even) {
-        @apply bg-gray-50;
-    }
-    table tbody tr:hover {
-        @apply bg-blue-50; /* Efek hover pada baris tabel */
-    }
-    .edit-btn, .delete-btn, .edit-finance-btn, .delete-finance-btn, .edit-contest-btn, .delete-contest-btn, .edit-doorprize-btn, .delete-doorprize-btn, .edit-schedule-btn, .delete-schedule-btn {
-        @apply text-blue-600 hover:text-blue-800 cursor-pointer font-medium transition-colors duration-150;
-    }
-    .delete-btn, .delete-finance-btn, .delete-contest-btn, .delete-doorprize-btn, .delete-schedule-btn {
-        @apply text-red-600 hover:text-red-800;
+    /* Gaya untuk hamburger menu (mobile) */
+    .hamburger-menu {
+        @apply md:hidden block cursor-pointer text-white text-3xl z-20;
     }
 }
 

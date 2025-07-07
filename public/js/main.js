@@ -101,10 +101,12 @@ document.addEventListener('DOMContentLoaded', function() {
             renderScheduleTimeline(scheduleData.scheduleItems);
             renderScheduleTransactionsTable(scheduleData.scheduleItems);
 
-        } catch (error) {
+        }
+        // Menangkap error jika gagal mengambil data dari server
+        catch (error) {
             console.error('Error fetching data:', error);
             alert('Gagal memuat data dari server. Pastikan backend berjalan dan URL API sudah benar.');
-            // Tampilkan pesan error di tabel/list masing-masing
+            // Menampilkan pesan error di tabel/list masing-masing section
             financeTransactionsTableBody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-red-500 text-center">Gagal memuat transaksi keuangan.</td></tr>`;
             contestTransactionsTableBody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-red-500 text-center">Gagal memuat daftar lomba.</td></tr>`;
             doorprizeTransactionsTableBody.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-red-500 text-center">Gagal memuat daftar doorprize.</td></tr>`;
@@ -202,8 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
         finances.forEach(finance => {
             const row = document.createElement('tr');
             row.className = 'hover:bg-gray-50';
-            // Perhatikan bahwa finance._id digunakan untuk ID, sesuaikan dengan backend SQL
-            // Backend SQL kita sudah mengembalikan ID sebagai '_id'
+            // finance._id digunakan untuk ID, karena backend SQL kita sudah mengembalikan ID sebagai '_id'
             row.innerHTML = `
                 <td class="px-6 py-4 whitespace-nowrap">
                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${finance.type === 'pemasukan' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
@@ -246,6 +247,7 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             let response;
             if (id) {
+                // Pastikan ID dikirim sebagai integer jika database SQL menggunakannya
                 response = await fetch(`${API_BASE_URL}/finances/${id}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
@@ -277,7 +279,8 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const response = await fetch(`${API_BASE_URL}/finances/${id}`);
             if (!response.ok) {
-                throw new Error(`Failed to fetch transaction for edit: ${response.statusText}`);
+                const errorData = await response.json();
+                throw new Error(`Failed to fetch transaction for edit: ${errorData.message || response.statusText}`);
             }
             const finance = await response.json();
 
@@ -429,7 +432,8 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const response = await fetch(`${API_BASE_URL}/contests/${id}`);
             if (!response.ok) {
-                throw new Error(`Failed to fetch contest for edit: ${response.statusText}`);
+                const errorData = await response.json();
+                throw new Error(`Failed to fetch contest for edit: ${errorData.message || response.statusText}`);
             }
             const contest = await response.json();
 
@@ -586,7 +590,8 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const response = await fetch(`${API_BASE_URL}/doorprize/${id}`);
             if (!response.ok) {
-                throw new Error(`Failed to fetch doorprize for edit: ${response.statusText}`);
+                const errorData = await response.json();
+                throw new Error(`Failed to fetch doorprize for edit: ${errorData.message || response.statusText}`);
             }
             const doorprize = await response.json();
 
@@ -736,7 +741,8 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const response = await fetch(`${API_BASE_URL}/schedule/${id}`);
             if (!response.ok) {
-                throw new Error(`Failed to fetch schedule item for edit: ${response.statusText}`);
+                const errorData = await response.json();
+                throw new Error(`Failed to fetch schedule item for edit: ${errorData.message || response.statusText}`);
             }
             const item = await response.json();
 
